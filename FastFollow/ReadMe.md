@@ -1,78 +1,70 @@
-# FastFollow
-FFXI Windower addon that allows multiboxers to follow more easily and keep their characters more tightly grouped. ONLY
-WORKS WITH MULTIBOXERS. Note that this is NOT the same as `/follow`. You must use `//ffo <name>` or `//ffo me` to start
-following.
+# FastFollow for Windower 4
 
+## Description
 
-## Installation
-After downloading, extract to your Windower addons folder. Make sure the folder is called FastFollow, rather than
--master or -v1.whatever. Your file structure should look like this:
+FastFollow is a Windower 4 addon that enhances the in-game follow functionality, making it smoother and more reliable for multi-boxing. It uses inter-process communication (IPC) to synchronize character movements, ensuring that your characters stay together without the jerky movements of the default follow command.
 
-    addons/FastFollow/FastFollow.lua
-    addons/FastFollow/spell_cast_times.lua
+## Features
 
-Once the addon is in your Windower addons folder, it won't show up in the Windower launcher. You need to load it
-manually or add a line to your `scripts/init.txt`:
-
-    lua load FastFollow
-
+* **Smooth Following:** Characters will follow the leader smoothly, maintaining a consistent distance.
+* **Automatic Pausing:** Following is automatically paused when a character performs actions like casting a spell or using an item, preventing interruptions.
+* **Distance Display:** An optional on-screen display shows the distance to other characters in your group.
+* **Cross-Character Communication:** Commands can be sent from one character to control the entire group, making it easy to start and stop following.
+* **Automatic Zoning:** Followers will automatically zone after the leader.
 
 ## Commands
-You can use `//fastfollow` or `//ffo`. Note that `<text>` means user choice. Do not actually write `<` and `>`.
-Similarly, `[text]` means that `text` is optional. `text1|text2` means choose one of `text1` *or* `text2`.
 
-#### [follow] \<character_name\>
+The addon can be controlled with the `/fastfollow` or `/ffo` command, followed by one of the sub-commands below:
 
-    //ffo Kaiyra
-    //ffo follow Maruru
+| Command                             | Description                                                                                                                              |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `follow <name>`                     | Starts following the character with the specified name.                                                                                  |
+| `me` or `followme`                  | Makes all other characters with the addon loaded follow the character who issued the command.                                              |
+| `stop`                              | Stops the current character from following.                                                                                              |
+| `stopall`                           | Stops all characters from following.                                                                                                     |
+| `pauseon <spell\|item\|dismount\|any>` | Toggles pausing on spell casting, item usage, or dismounting. Using `any` toggles all three.                                               |
+| `pausedelay <seconds>`              | Sets the delay in seconds before a spell or item is used after pausing.                                                                  |
+| `info [on\|off]`                      | Toggles the distance display. You can explicitly set it to `on` or `off`.                                                                  |
+| `min <distance>`                    | Sets the minimum distance to maintain from the followed character. The value should be between 0.2 and 50.0.                               |
 
-Will cause the current character to follow the specified character.
+## Installation
 
-#### followme
+1.  Download the addon files.
+2.  Place the `FastFollow` folder inside your Windower4 `addons` folder.
+3.  The folder structure should look like this: `Windower4/addons/FastFollow/FastFollow.lua`.
+4.  In-game, load the addon with the command: `//lua load fastfollow`
 
-    //ffo followme
-    //ffo me
+## Configuration
 
-Cause all other characters to follow this one.
+The addon's settings are stored in `Windower4/addons/FastFollow/data/settings.xml`. You can manually edit this file to change the default settings.
 
-#### stop
+Here is an example of the settings file:
 
-    //ffo stop
+```xml
+<settings>
+    <global>
+        <display>
+            <bg>
+                <alpha>102</alpha>
+                <blue>0</blue>
+                <green>0</green>
+                <red>0</red>
+            </bg>
+            <pos>
+                <x>0</x>
+                <y>0</y>
+            </pos>
+            <text>
+                <alpha>255</alpha>
+                <blue>255</blue>
+                <font>Consolas</font>
+                <green>255</green>
+                <red>255</red>
+                <size>10</size>
+            </text>
+        </display>
+        <min>0.5</min>
+        <show>false</show>
+    </global>
 
-Make this character stop following.
-
-#### stopall
-
-    //ffo stopall
-
-Stop following on all characters.
-
-#### pauseon \<spells|items|dismount\>
-
-    //ffo pauseon spells
-    //ffo pauseon items
-    //ffo pauseon dismount
-
-Use auto-pausing to temporarily stop following to cast spells, etc.
-
-#### pausedelay \<delay\>
-
-    //ffo pausedelay 0.2
-
-Choose how long to wait for following to correctly stop before doing the action.
-
-#### min \<distance\>
-    //ffo min <distance>
-
-Set how closely to follow. Minimum 0.2 yalms, maximum 50.0 yalms.
-
-#### zone \<duration\>
-    //ffo zone <duration>
-
-Set how long to attempt to follow into the next zone.
-
-#### info [on|off]
-
-    //ffo info [on|off]
-
-Display a box containing client-to-client distances, to detect when an alt gets orphaned.
+</settings>
